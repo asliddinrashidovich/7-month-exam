@@ -34,3 +34,8 @@
       width: 200px;
     }
   }
+
+  .skeleton-img {
+    width: 100% !important;
+    height: 200px !important;
+  }
