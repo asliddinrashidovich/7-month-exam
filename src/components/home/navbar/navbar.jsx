@@ -45,7 +45,7 @@ function Navbar() {
                 <Link to={'/'}>Home</Link>
             </Button>
             <Button sx={{ color: '#3D3D3D', fontSize: '16px', fontWeight: '400', lineHeight: '100%',}}>
-                <Link to={'/blog'}>Blog</Link>
+                <Link to={'/posts'}>Blog</Link>
             </Button>
           </Box>
           <Toaster
@@ -92,7 +92,7 @@ function Navbar() {
                 {user && (
                   <Box  sx={{display: {xs: 'none', md: 'flex'}}}>
                     <Link to={'/profile'}>
-                      <MainButton>{user.name}</MainButton>
+                      <MainButton>{user.firstName}</MainButton>
                     </Link>
                   </Box>
                 )}
@@ -138,7 +138,7 @@ function Navbar() {
             </Link>
           </ListItem>
           <ListItem button>
-            <Link to={'/blog'}>
+            <Link to={'/posts'}>
               <ListItemText primary="Blog" primaryTypographyProps={{ color: 'green' }} />
             </Link>
           </ListItem>
@@ -154,7 +154,7 @@ function Navbar() {
         </Button>}
         {user && (
           <div className='flex '>
-            <MainButton>{user.name}</MainButton>
+            <MainButton>{user.firstName}</MainButton>
           </div>
         )}
       </Drawer>

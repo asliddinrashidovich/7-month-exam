@@ -1,10 +1,7 @@
 import { Button, Form, Input } from 'antd';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
-import toast from 'react-hot-toast';
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { signInWithGoogle } from '../../../firebase';
 
 FormRegister.propTypes  = {
   setOpen2: PropTypes.func.isRequired
@@ -19,35 +16,10 @@ function FormRegister({setOpen2}) {
     const [password2, setPassword2] = useState('')
     
     const postRegister = async () => {  
-        if(password == password2) {
-          await axios.post(`https://green-shop-backend.onrender.com/api/user/sign-up?access_token=6506e8bd6ec24be5de357927`, {name, surname,password, email}).then((res) => {
-            setOpen2(false)
-            localStorage.setItem('user', JSON.stringify(res.data.data.user))
-          }).catch((err) => {
-          if(err.status == 409) {
-                toast.error('User Not found, please Try again')
-            } else {
-                toast.error('Something went wrong')
-            }
-          })
-        } else {
-          toast.error('Not matched! You confirmed your password with wrong credential!')
-        }
-    };
+        console.log('register')
+        setOpen2(false)
+      };
 
-    const handleSignupGoogle = async () => {
-        const res = await signInWithGoogle()
-        await axios.post(`https://green-shop-backend.onrender.com/api/user/sign-up/google?access_token=6506e8bd6ec24be5de357927`, {email: res?.user?.email}).then((res) => {
-          setOpen2(false)
-          localStorage.setItem('user', JSON.stringify(res.data.data.user))
-        }).catch((err) => {
-          if(err.status == 409) {
-            toast.error('User Not found, please Try again')
-          } else {
-            toast.error('Something went wrong')
-          }
-        })
-    }
   return  (
   <Form
     name="basic"
@@ -110,7 +82,7 @@ function FormRegister({setOpen2}) {
       </Button>
     </Form.Item>
     <h2 className='text-center text-[#3D3D3D] text-[13px] font-[400] leading-[16px] mb-[27px]'>Or register with</h2>
-    <Button onClick={handleSignupGoogle} className='mb-[20px] flex gap-[10px] items-center border-[#EAEAEA] border-[1px] rounded-[5px] w-full py-[10px] justify-center cursor-pointer'>
+    <Button className='mb-[20px] flex gap-[10px] items-center border-[#EAEAEA] border-[1px] rounded-[5px] w-full py-[10px] justify-center cursor-pointer'>
       <FaGoogle />
       <span>Continue with Google</span>
     </Button>

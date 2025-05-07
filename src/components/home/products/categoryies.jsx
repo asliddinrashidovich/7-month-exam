@@ -48,7 +48,6 @@ function Categoryies() {
       queryKey: ["discount"],
       queryFn: fetchDiscount,
     });
-console.log(categoryData)
   return (
     <div className="py-[14px] px-[20px] hidden lg:flex md:flex-col w-[310px]">
         <h2 className="font-[700] text-[18px] leading-[16px] mb-[7px]">Categories</h2>
@@ -60,7 +59,7 @@ console.log(categoryData)
                 </div>
             ))}
             {loading1 && (
-                <Skeleton paragraph={{rows: 10}}/>
+                <Skeleton paragraph={{rows: 20}}/>
             )}
             </div>
             <h2 className="font-[700] text-[18px] leading-[16px] mb-[7px]">Price Range</h2>

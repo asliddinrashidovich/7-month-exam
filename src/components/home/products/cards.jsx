@@ -88,7 +88,6 @@ function ProductCards() {
         const handleChangeSlider = (event, newValue) => {
             setValue(newValue);
         };
-        console.log(productsData)
   return (
     <div className="w-full lg:w-[70%]">
         <div className="flex justify-between items-center mb-[35px]">

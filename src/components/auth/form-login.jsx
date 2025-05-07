@@ -4,45 +4,25 @@ import PropTypes from 'prop-types';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { FaFacebook, FaGoogle } from "react-icons/fa";
-import { signInWithGoogle } from '../../../firebase';
 
 FormLogin.propTypes  = {
   setOpen2: PropTypes.func.isRequired
 }
 function FormLogin({setOpen2}) {
-  const [email, setEmail] = useState('')
+  const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   
   const postLogin = async () => {
-      await axios.post(`https://green-shop-backend.onrender.com/api/user/sign-in?access_token=6506e8bd6ec24be5de357927`, {password, email}).then((res) => {
+      await axios.post(`https://dummyjson.com/auth/login`, {password, username}).then((res) => {
         setOpen2(false)
         console.log(res)
-        localStorage.setItem('user', JSON.stringify(res.data.data.user))
-        localStorage.setItem('token', res.data.data.token)
-      }).catch((err) => {
-        if(err.status == 409) {
-          toast.error('User Not found, please Try again')
-        } else {
-          toast.error('Something went wrong')
-        }
+        localStorage.setItem('user', JSON.stringify(res.data))
+        localStorage.setItem('token', res.data.accessToken)
+      }).catch(() => {
+        toast.error('Something went wrong')
       })
   };
 
-  const handleLoginGoogle = async () => {
-      const res = await signInWithGoogle()
-      await axios.post(`https://green-shop-backend.onrender.com/api/user/sign-in/google?access_token=6506e8bd6ec24be5de357927`, {email: res?.user?.email}).then((res) => {
-        setOpen2(false)
-        localStorage.setItem('user', JSON.stringify(res.data.data.user))
-        localStorage.setItem('token', res.data.data.token)
-      }).catch((err) => {
-        if(err.status == 409) {
-          toast.error('Email already exists')
-        } else {
-          toast.error('Email already exists')
-        }
-      })
-  }
-  
   return (
   <Form
     name="basic"
@@ -53,11 +33,11 @@ function FormLogin({setOpen2}) {
   >
     <h2 className='text-[13px] leading-[16px] font-[400] mb-[14px]'>Enter your username and password to login.</h2>
     <Form.Item
-      name="email"
+      name="username"
       style={{width: '100%'}} 
-      rules={[{ required: true, message: 'Please enter your email!'}]}
+      rules={[{ required: true, message: 'Please enter your username!'}]}
     >
-      <Input value={email} onChange={(e) => setEmail(e.target.value)}  placeholder='almamun_uxui@outlook.com'/>
+      <Input value={username} onChange={(e) => setUsername(e.target.value)}  placeholder='username'/>
     </Form.Item>
 
     <Form.Item
@@ -89,7 +69,7 @@ function FormLogin({setOpen2}) {
       </Button>
     </Form.Item>
     <h2 className='text-center text-[#3D3D3D] text-[13px] font-[400] leading-[16px] mb-[27px]'>Or login with</h2>
-    <Button onClick={handleLoginGoogle} className='mb-[20px] flex gap-[10px] items-center border-[#EAEAEA] border-[1px] rounded-[5px] w-full py-[10px] justify-center cursor-pointer'>
+    <Button  className='mb-[20px] flex gap-[10px] items-center border-[#EAEAEA] border-[1px] rounded-[5px] w-full py-[10px] justify-center cursor-pointer'>
       <FaGoogle />
       <span>Login with Google</span>
     </Button>
