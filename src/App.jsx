@@ -3,6 +3,8 @@ import MainLayout from './layout/main-layout'
 import Homepage from './pages/home-page'
 import NotFoundPage from './pages/not-found'
 import ProductDetailsPage from './pages/product-details'
+import ProductCard from './pages/product-card'
+import Checkout from './pages/checkout'
 
 function App() {
   const routes = createBrowserRouter(
@@ -10,11 +12,10 @@ function App() {
       <Route path="/" element={<MainLayout/>}>
         <Route index element={<Homepage/>}/>
         <Route path="shop/:id" element={<ProductDetailsPage/>}/>
+        <Route path="product-card" element={<ProductCard/>}/>
+        <Route path="product-checkout" element={<Checkout/>}/>
         {/* <Route path="blog" element={<BlogsPage/>}></Route> */}
-        {/* <Route path="product-card" element={<ProductCard/>}/> */}
-        {/* <Route path="product-checkout" element={<Checkout/>}/> */}
         {/* <Route path="blog/:id" element={<BlogDetails/>}/> */}
-        {/* <Route path="shop/:category/:id" element={<ProductDetailsPage/>}/> */}
         {/* <Route path="profile/" element={<ProtectedRoute><ProfilePage/></ProtectedRoute>}>
           <Route index element={<ProtectedRoute><AccountDetails/></ProtectedRoute>}/>
           <Route path="my-products" element={<ProtectedRoute><MyProducts/></ProtectedRoute>}/>

@@ -3,7 +3,7 @@ import { deletter, getter, setter } from "../hooks/useLocalStorage";
 
 const _calcTotal = (data) => {
   return data.reduce(
-    (acc, currentValue) => (currentValue?.count * (currentValue?.price * 100)) / 100 + acc,
+    (acc, currentValue) => (currentValue?.count * (currentValue?.price * 100)  + (acc * 100)) / 100,
     0,
   );
 };
@@ -22,9 +22,9 @@ const shoppingSlice = createSlice({
   initialState,
   reducers: {
     addDataToShopping(state, { payload }) {
-      state.data = state.data.some((value) => value._id === payload._id)
+      state.data = state.data.some((value) => value.id === payload.id)
         ? state.data.map((value) =>
-            value._id === payload._id
+            value.id === payload.id
               ? { ...payload, count: value.count + 1 }
               : value,
           )
@@ -36,7 +36,7 @@ const shoppingSlice = createSlice({
     },
     increaseCountFromShopping(state, { payload }) {
       state.data = state.data.map((value) =>
-        value._id === payload._id
+        value.id === payload.id
           ? { ...value, count: Number(value.count) + 1 }
           : value,
       );
@@ -46,7 +46,7 @@ const shoppingSlice = createSlice({
     },
     decreaseCountFromShopping(state, { payload }) {
       state.data = state.data.map((value) =>
-        value._id === payload._id
+        value.id === payload.id
           ? {
               ...value,
               count: Number(value.count) ? Number(value.count) - 1 : 1,
@@ -58,7 +58,7 @@ const shoppingSlice = createSlice({
       setter({ key: "total_price", setValue: state.total });
     },
     deleteFlowerFromShopping(state, { payload }) {
-      state.data = state.data.filter((value) => value._id !== payload._id);
+      state.data = state.data.filter((value) => value.id !== payload.id);
       state.total = _calcTotal(state.data);
       setter({ key: "shopping_card", setValue: state.data });
       setter({ key: "total_price", setValue: state.total });

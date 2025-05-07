@@ -184,11 +184,11 @@ function ProductDetailsPage() {
                 </div>
                 </div>
             </div>
-            <div className="my-[30px]">
+            <div className="my-[100px]">
                 <Tabs defaultActiveKey="1" items={items} onChange={onChange} className="custom-tabs text-[18px] font-[500] leading-[130%] mb-[20px]"/>
             </div>
-            <div>
-                <h2>You may be interested in</h2>
+            <div className="my-[128px]">
+                <h2 className="text-[#46A358] text-[17px] font-[700] leading-[16px] mb-[12px]">You may be interested in</h2>
                 <hr />
                 <ReletedProductsData flowerReletedData={flowerReletedData?.products}/>
             </div>
