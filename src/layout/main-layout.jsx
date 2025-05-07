@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom"
-import { Footer, Navbar } from "../components"
+import { Footer, FooterContact, FooterHeader, Navbar } from "../components"
 // import { Footer, Navbar } from "../components"
 
 function MainLayout() {
@@ -10,6 +10,8 @@ function MainLayout() {
         <div>
             <Outlet/>
         </div>
+        <FooterContact/>  
+        <FooterHeader/>
         <Footer/>
     </>
   )

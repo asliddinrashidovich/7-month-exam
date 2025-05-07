@@ -39,3 +39,11 @@
     width: 100% !important;
     height: 200px !important;
   }
+
+  .custom-tabs .ant-tabs-tab-active {
+    color: #46A358 !important; /* Faol tab text rangi */
+  }
+  
+  .custom-tabs .ant-tabs-tab-active::before {
+    border-color: #46A358 !important; /* Tagidagi chiziq rangi */
+  }

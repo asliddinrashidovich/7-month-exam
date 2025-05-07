@@ -1,14 +1,12 @@
-import { BlogSection, FooterContact, FooterHeader, Hero, ProductsSection, Trends } from "../components"
+import { BlogSection, Hero, ProductsSection, Trends } from "../components"
 
 function Homepage() {
     return (
       <>
         <Hero/>
         <ProductsSection/>
-        {/* <Trends/>
-        <BlogSection/> */}
-        <FooterContact/>  
-        <FooterHeader/>
+        <Trends/>
+        <BlogSection/>
       </>
     )
   }

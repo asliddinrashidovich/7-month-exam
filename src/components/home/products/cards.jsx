@@ -21,7 +21,7 @@ function ProductCards() {
     // useSearchparams
 
     // sort by category
-    const categoryBy  = searchParams.get('category') || 'house-plants'
+    const categoryBy  = searchParams.get('category') || 'beauty'
     
     const updateParams = (categorytype) => {
         searchParams.set('category', categorytype)
@@ -38,7 +38,7 @@ function ProductCards() {
     }
     
     // sort by sort
-    const sortBy  = searchParams.get('sort') || 'default-sorting'
+    // const sortBy  = searchParams.get('sort') || 'default-sorting'
     
     const updateSortBy = (sort) => {
         setSortAmount(sort);
@@ -47,8 +47,8 @@ function ProductCards() {
     }
     
     // filter by amount
-    const rangeMin  = searchParams.get('range_min') || 0
-    const rangeMax  = searchParams.get('range_max') || 1000
+    // const rangeMin  = searchParams.get('range_min') || 0
+    // const rangeMax  = searchParams.get('range_max') || 1000
     
     const handleSliderFilter = () => {
         searchParams.set('range_min', value[0])
@@ -57,14 +57,17 @@ function ProductCards() {
         handleClose()
     }
     
+    fetch('https://dummyjson.com/products?sortBy=Knife&order=asc')
+    .then(res => res.json())
+    .then(console.log);
     
         // getting APIs
         const fetchCategory = async () => {
             const res = await axios.get(`https://green-shop-backend.onrender.com/api/flower/category?access_token=6506e8bd6ec24be5de357927`);
             return res.data;
         };
-        const fetchFlowersByCategory = async ({categoryBy, typeSort, sortBy, rangeMin, rangeMax}) => {
-            const res = await axios.get(`https://green-shop-backend.onrender.com/api/flower/category/${categoryBy}?access_token=6506e8bd6ec24be5de357927&type=${typeSort}&sort=${sortBy}&range_min=${rangeMin}&range_max=${rangeMax}`);
+        const dataDummy = async () => {
+            const res = await axios.get(`https://dummyjson.com/products/category/${categoryBy}`);
             return res.data;
         };
 
@@ -72,9 +75,9 @@ function ProductCards() {
             queryKey: ["category"],
             queryFn: fetchCategory,
         });
-        const { data: flowersData , isLoading: loading3} = useQuery({
-            queryKey: ["flowers", {categoryBy, typeSort, sortBy, rangeMin, rangeMax}],
-            queryFn: () => fetchFlowersByCategory({categoryBy, typeSort, sortBy, rangeMin, rangeMax}),
+        const { data: productsData, isLoading: loading3} = useQuery({
+            queryKey: ["dummy-data", categoryBy],
+            queryFn: dataDummy,
         });
 
         function handleAddToCard(itemData) {
@@ -85,6 +88,7 @@ function ProductCards() {
         const handleChangeSlider = (event, newValue) => {
             setValue(newValue);
         };
+        console.log(productsData)
   return (
     <div className="w-full lg:w-[70%]">
         <div className="flex justify-between items-center mb-[35px]">
@@ -145,27 +149,29 @@ function ProductCards() {
             </div>
         </div>
         {!loading3 && <div className="grid grid-cols-2 md:grid-cols-3 gap-[33px]">
-        {flowersData?.data?.map((item) => (
+        {productsData?.products?.map((item) => (
             <div key={item.title}>
             <div className="flex group overflow-hidden justify-center relative w-full h-[300px] items-center bg-[#FBFBFB] mb-3">
-                <img src={item.main_image} alt="main image" />
+                <img src={item.images[0]} alt="main image" />
                 <div className="hidden gap-[20px] group-hover:flex items-center absolute bottom-[10px]">
                     <img onClick={() => handleAddToCard(item)} className="cursor-pointer" src="/navbar/shop_icon.svg" alt="shop" />
                     <img className="cursor-pointer" src="/flowers/like.svg" alt="like" />
-                    <img className="cursor-pointer" src="/navbar/search_icon.svg" alt="search" />
+                    <Link to={`/shop/${item.id}`}>
+                        <img className="cursor-pointer" src="/navbar/search_icon.svg" alt="search" />
+                    </Link>
                 </div>
                 {item.discount && <div className={`absolute left-0 top-[20px]`}>
                     <MainButton >13% OFF</MainButton>
                 </div>}
             </div>
-            <Link to={`/shop/${item.category}/${item._id}`} className="text-[16px] font-[400] leading-[16px] text-[#3D3D3D] mb-[6px]">{item.title}</Link>
+            <Link to={`/shop/${item.id}`} className="text-[16px] hover:underline  font-[400] leading-[16px] text-[#3D3D3D] mb-[6px]">{item.title}</Link>
             <h2 className="text-[18px] font-[700] leading-[16px] text-[#46A358] mb-[6px]">${item.price} <span className="font-[400] line-through text-[#A5A5A5]"> {item.discount && '$'}{item.discount &&  item.discount_price}</span></h2>
             </div>
         ))}
         </div>}
         {loading3 && <FlowersCards/>}
         <div className="w-full flex justify-center pt-[100px] ">
-        {!flowersData?.data.length && (
+        {!productsData?.products?.length && (
             <div className="text-center gap-[10px]">
             <img src="/flowers/no_data.svg" alt="no data" />
             <p>Data is empty.</p>
