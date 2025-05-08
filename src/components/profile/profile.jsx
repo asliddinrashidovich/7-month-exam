@@ -42,9 +42,9 @@ function ProfileSection() {
                     <img src="/profile/Location.svg" alt="location" />
                     <p className={`font-[700] text-[15px] leading-[45px] ${activeFilter == 'address' ? 'text-[#46A358]' : 'text-[#727272]'}`}>Address</p>
                 </div>
-                <div onClick={() => handleTab('Wishlist')} className={`flex gap-[11px] items-center border-l-[5px] pl-[20px] cursor-pointer ${activeFilter == 'wishlist' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
+                <div onClick={() => handleTab('My Posts')} className={`flex gap-[11px] items-center border-l-[5px] pl-[20px] cursor-pointer ${activeFilter == 'my-posts' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
                     <img src="/profile/like (2).svg" alt="likes" />
-                    <p className={`font-[700] text-[15px] leading-[45px] ${activeFilter == 'wishlist' ? 'text-[#46A358]' : 'text-[#727272]'}`}>Wishlist</p>
+                    <p className={`font-[700] text-[15px] leading-[45px] ${activeFilter == 'my-posts' ? 'text-[#46A358]' : 'text-[#727272]'}`}>My Posts</p>
                 </div>
                 <div onClick={() => handleTab('Track Order')} className={`flex gap-[11px] items-center border-l-[5px] pl-[20px] cursor-pointer ${activeFilter == 'track-order' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
                     <IoMdSpeedometer style={{color: '#727272'}}/>

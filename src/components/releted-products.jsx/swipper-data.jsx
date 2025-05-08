@@ -36,7 +36,7 @@ export default function ReletedProductsData({flowerReletedData}) {
           clickable: true,
         }}
         modules={[FreeMode, Pagination]}
-        className="mySwiper"
+        className="mySwiper h-[400px]"
       >
         {flowerReletedData?.map(item => (
             <SwiperSlide key={item.id}>

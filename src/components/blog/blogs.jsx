@@ -24,12 +24,8 @@ function BlogsAll() {
       queryFn: fetchBlog,
     });
 
-    const totalCountData = Math.floor(blog?.posts.length)
-    console.log(currentPage)
-
     function handleClick(id) {  
       navigate(`/posts/${id}`)
-      putView(id)
     }
 
     if(loading) {

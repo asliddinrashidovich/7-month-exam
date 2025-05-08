@@ -104,7 +104,7 @@ function ProductCard() {
                                 </td>
                             </tr>
                            ))}
-                           {!shopData && 
+                           {!shopData.length && 
                             <tr>
                                 <td colSpan={5} className="text-[center]">
                                     <NotFound>No data</NotFound>

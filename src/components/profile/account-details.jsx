@@ -1,33 +1,58 @@
-import { Button, Form, Input, Space, Upload } from 'antd';
+import { Button, Form, Input, Upload } from 'antd';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { UploadOutlined } from '@ant-design/icons';
 import MainButton from '../button/button';
+import { useQuery } from "@tanstack/react-query";
+import AccountDetailsSkeleton from '../skleton/account-details-skeleton';
+
+
 
 function AccountDetails() {
-    const user = JSON.parse(localStorage.getItem('user'))
+    const token = localStorage.getItem('token')
+    
+    const getAuth = async () => {
+        const res = await axios.get(`https://dummyjson.com/auth/me`, {
+            headers: {
+                'Authorization': token
+            }
+        });
+        return res.data;
+    };
+    const { data: dataMe, isLoading: loading1} = useQuery({
+        queryKey: ["dummy-data"],
+        queryFn: getAuth,
+    });
 
   const postAccountData = async (values) => {
-      const { firstName, lastName, email, phone, username,  } = values;
+      const { lastName } = values;
       
-      await axios.post(`https://green-shop-backend.onrender.com/api/user/account-details?access_token=6506e8bd6ec24be5de357927`, {_id: user._id, name: firstName, surname: lastName, email: email, phone_number: phone, username: username, profile_photo: user.profile_photo})
-      .then((res) => {
-        console.log(res)
+      await axios.put(`https://dummyjson.com/users/${dataMe.id}`,{
+        headers: { 'Content-Type': 'application/json' },
+      }, {lastName: lastName})
+      .then(() => {
         toast.success("Your account details has been updated!")
-      }).catch(() => {
-      })
+    }).catch(() => {
+        toast.error("Something went wrong")
+    })
   };
-  console.log(user)
+
+    
+
+    console.log(token)
+    if(loading1) {
+        return <AccountDetailsSkeleton/>
+    }
   return (
     <>
         <h2 className='text-[16px] leading-[16px] font-[500] text-[#3D3D3D] mb-[20px]'>Personal Information</h2>
         <Form
             initialValues={{
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-                phone: "",
-                username: user.username,
+                firstName: dataMe?.firstName,
+                lastName: dataMe?.lastName,
+                email: dataMe?.email,
+                phone: dataMe?.phone,
+                username: dataMe?.username,
             }}
             name="layout-multiple-horizontal"
             layout="horizontal"
@@ -74,10 +99,7 @@ function AccountDetails() {
                 labelCol={{ span: 24 }}
                 wrapperCol={{ span: 24 }}
             >
-                <Space.Compact className='w-full'>
-                    <Input style={{ width: '60px' }} defaultValue="+998" />
-                    <Input style={{ width: '85%' }} placeholder='Your phone number...'/>
-                </Space.Compact>
+                <Input placeholder="Your phone number..." />
             </Form.Item>
 
             <Form.Item

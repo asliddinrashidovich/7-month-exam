@@ -7,7 +7,7 @@ import ProductCard from './pages/product-card'
 import Checkout from './pages/checkout'
 import PropTypes from 'prop-types'
 import ProfilePage from './pages/profile'
-import { AccountDetails, Address, MyProducts, TrackOrder, Wishlist } from './components'
+import { AccountDetails, Address, MyProducts, TrackOrder, MyPosts } from './components'
 import BlogsPage from './pages/blog'
 import BlogDetails from './components/blog/blog-details'
 
@@ -38,7 +38,7 @@ function App() {
           <Route index element={<ProtectedRoute><AccountDetails/></ProtectedRoute>}/>
           <Route path="my-products" element={<ProtectedRoute><MyProducts/></ProtectedRoute>}/>
           <Route path="address" element={<ProtectedRoute><Address/></ProtectedRoute>}/>
-          <Route path="wishlist" element={<ProtectedRoute><Wishlist/></ProtectedRoute>}/>
+          <Route path="my-posts" element={<ProtectedRoute><MyPosts/></ProtectedRoute>}/>
           <Route path="track-order" element={<ProtectedRoute><TrackOrder/></ProtectedRoute>}/>
         </Route>
         <Route path="*" element={<NotFoundPage/>}/>

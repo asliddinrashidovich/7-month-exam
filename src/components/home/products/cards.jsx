@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, MenuItem, Modal, Select, Slider } from "@mui/material"
+import { Box, Button, Modal, Slider } from "@mui/material"
 import axios from "axios";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -8,18 +8,19 @@ import toast from "react-hot-toast";
 import { addDataToShopping } from "../../../reducers/shoppingSlice";
 import { useQuery } from "@tanstack/react-query";
 import FlowersCards from "../../skleton/flowers-card";
+import { Space, Input } from "antd";
+const { Search } = Input;
 
 function ProductCards() {
     const [searchParams, setSearchParams] = useSearchParams()
-    const [sortAmount, setSortAmount] = useState('default-sorting');
     const [value, setValue] = useState([0, 1000]);
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const dispatch = useDispatch()
-
+    
     // useSearchparams
-
+    
     // sort by category
     const categoryBy  = searchParams.get('category') || 'beauty'
     
@@ -37,14 +38,6 @@ function ProductCards() {
         setSearchParams(searchParams)
     }
     
-    // sort by sort
-    // const sortBy  = searchParams.get('sort') || 'default-sorting'
-    
-    const updateSortBy = (sort) => {
-        setSortAmount(sort);
-        searchParams.set('sort', sort)
-        setSearchParams(searchParams)
-    }
     
     // filter by amount
     // const rangeMin  = searchParams.get('range_min') || 0
@@ -57,37 +50,50 @@ function ProductCards() {
         handleClose()
     }
     
-    fetch('https://dummyjson.com/products?sortBy=Knife&order=asc')
-    .then(res => res.json())
-    .then(console.log);
+    // search 
+    const searchProducts  = searchParams.get('products-search')
+
+    const onSearch = (value, _e, info) => {
+      console.log(info === null || info === void 0 ? void 0 : info.source, value);
+      searchParams.set('products-search', value)
+      setSearchParams(searchParams)
+    }
+    // getting APIs
+    const fetchCategory = async () => {
+        const res = await axios.get(`https://dummyjson.com/products/categories`);
+        return res.data;
+    };
+    const dataDummy = async () => {
+        const res = await axios.get(`https://dummyjson.com/products/category/${categoryBy}`);
+        const allProducts = res.data.products;
+
+        const filtered = allProducts.filter(product =>
+            product.title.toLowerCase().includes(searchProducts.toLowerCase())
+        );
+        console.log(allProducts, searchProducts)
+
+        return { products: filtered };
+    };
+
+    const { data: categoryData} = useQuery({
+        queryKey: ["category"],
+        queryFn: fetchCategory,
+    });
+    const { data: productsData, isLoading: loading3} = useQuery({
+        queryKey: ["dummy-data", categoryBy, searchProducts],
+        queryFn: dataDummy,
+    });
     
-        // getting APIs
-        const fetchCategory = async () => {
-            const res = await axios.get(`https://green-shop-backend.onrender.com/api/flower/category?access_token=6506e8bd6ec24be5de357927`);
-            return res.data;
-        };
-        const dataDummy = async () => {
-            const res = await axios.get(`https://dummyjson.com/products/category/${categoryBy}`);
-            return res.data;
-        };
 
-        const { data: categoryData} = useQuery({
-            queryKey: ["category"],
-            queryFn: fetchCategory,
-        });
-        const { data: productsData, isLoading: loading3} = useQuery({
-            queryKey: ["dummy-data", categoryBy],
-            queryFn: dataDummy,
-        });
+    function handleAddToCard(itemData) {
+        toast.success('Added to you shopping card!')
+        dispatch(addDataToShopping(itemData))
+    }
 
-        function handleAddToCard(itemData) {
-            toast.success('Added to you shopping card!')
-            dispatch(addDataToShopping(itemData))
-        }
-
-        const handleChangeSlider = (event, newValue) => {
-            setValue(newValue);
-        };
+    const handleChangeSlider = (event, newValue) => {
+        setValue(newValue);
+    };
+    console.log(productsData)
   return (
     <div className="w-full lg:w-[70%]">
         <div className="flex justify-between items-center mb-[35px]">
@@ -96,22 +102,10 @@ function ProductCards() {
                 <h3 onClick={() => updateTypeSort('new-arrivals')} className={`text-[14px] md:text-[16px] ${typeSort == 'new-arrivals' ? 'text-[#46A358] border-b-[1px] border-[#46A358] pb-[5px]' : 'text-[#3D3D3D] pb-[5px]'}  font-[700] cursor-pointer leading-[16px]`}>New Arrivals</h3>
                 <h3 onClick={() => updateTypeSort('sale')} className={`text-[14px] md:text-[16px] ${typeSort == 'sale' ? 'text-[#46A358] border-b-[1px] border-[#46A358] pb-[5px]' : 'text-[#3D3D3D] pb-[5px]'}  font-[700] cursor-pointer leading-[16px]`}>Sale</h3>
             </div>
-            <div className="lg:flex gap-[5px] hidden items-center">
-                <h2>Sort by:</h2>
-                <FormControl sx={{ marginLeft: 1, minWidth: 120,  }}>
-                <Select
-                    value={sortAmount}
-                    onChange={(e) => updateSortBy(e.target.value)}
-                    displayEmpty
-                    inputProps={{ 'aria-label': 'Without label' }}
-                >
-                    <MenuItem value="default-sorting">
-                    <em>Default sorting</em>
-                    </MenuItem>
-                    <MenuItem value={'most-cheapest'}>Most Cheapest</MenuItem>
-                    <MenuItem value={"most-expensive"}>Most Expensive</MenuItem>
-                </Select>
-                </FormControl>
+            <div>
+                <Space direction="vertical">
+                    <Search placeholder="Search..." onSearch={onSearch} style={{width: 200}}  className='input-search' />
+                </Space>
             </div>
             <div className="flex lg:hidden cursor-pointer">
                 <Button onClick={handleOpen}>
@@ -121,10 +115,10 @@ function ProductCards() {
                 <Box sx={{backgroundColor: '#fff', height: 'auto', marginTop: '20px',  borderRadius: '15px', maxWidth: '500px', width: '100%', padding:'30px'}}>
                     <h2 className="font-[700] text-[18px] leading-[16px] mb-[7px]">Categories</h2>
                     <div className="px-[12px] mb-[36px]">
-                        {categoryData?.data && categoryData?.data.map((item) => (
-                            <div key={item.title} onClick={() => updateParams(item.route_path)} className="flex text-[#46A358] justify-between w-full cursor-pointer group">
-                                <p className={`font-[700] text-[15px] leading-[40px] ${categoryBy == item.route_path ? 'text-[#46A358]' : 'text-[#3D3D3D] '}  group-hover:text-[#46A358] transition-all duration-[.3s]` }>{item.title}</p>
-                                <p className={`font-[700] text-[15px] leading-[40px] ${categoryBy == item.route_path ? 'text-[#46A358]' : 'text-[#3D3D3D] '} group-hover:text-[#46A358] transition-all duration-[.3s]`}>({item.count})</p>
+                        {categoryData && categoryData?.map((item) => (
+                            <div key={item.title} onClick={() => updateParams(item.slug)} className="flex text-[#46A358] justify-between w-full cursor-pointer group">
+                                <p className={`font-[700] text-[15px] leading-[40px] ${categoryBy == item.slug ? 'text-[#46A358]' : 'text-[#3D3D3D] '}  group-hover:text-[#46A358] transition-all duration-[.3s]` }>{item.name}</p>
+                                <p className={`font-[700] text-[15px] leading-[40px] ${categoryBy == item.slug ? 'text-[#46A358]' : 'text-[#3D3D3D] '} group-hover:text-[#46A358] transition-all duration-[.3s]`}>(0)</p>
                             </div>
                         ))}
                     </div>

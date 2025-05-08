@@ -15,11 +15,10 @@ function FormLogin({setOpen2}) {
   const postLogin = async () => {
       await axios.post(`https://dummyjson.com/auth/login`, {password, username}).then((res) => {
         setOpen2(false)
-        console.log(res)
         localStorage.setItem('user', JSON.stringify(res.data))
         localStorage.setItem('token', res.data.accessToken)
       }).catch(() => {
-        toast.error('Something went wrong')
+        toast.error('Invalid credentals, plaese try again')
       })
   };
 
