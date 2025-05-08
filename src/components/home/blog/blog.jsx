@@ -11,7 +11,7 @@ function BlogSection() {
                 <CardMedia
                 component="img"
                 height="140"
-                image="/blog/01.png"
+                image="https://cdn.dummyjson.com/product-images/groceries/apple/1.webp"
                 alt="green iguana"
                 />
                 <CardContent>
@@ -39,7 +39,7 @@ function BlogSection() {
                 <CardMedia
                 component="img"
                 height="140"
-                image="/blog/02.png"
+                image="https://cdn.dummyjson.com/product-images/home-decoration/decoration-swing/2.webp"
                 alt="green iguana"
                 />
                 <CardContent>
@@ -67,7 +67,7 @@ function BlogSection() {
                 <CardMedia
                 component="img"
                 height="140"
-                image="/blog/03.png"
+                image="https://cdn.dummyjson.com/product-images/womens-watches/iwc-ingenieur-automatic-steel/1.webp"
                 alt="green iguana"
                 />
                 <CardContent>
@@ -95,7 +95,7 @@ function BlogSection() {
                 <CardMedia
                 component="img"
                 height="140"
-                image="/blog/01.png"
+                image="https://cdn.dummyjson.com/product-images/mobile-accessories/apple-airpods-max-silver/1.webp"
                 alt="green iguana"
                 />
                 <CardContent>

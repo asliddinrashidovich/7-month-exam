@@ -12,6 +12,7 @@ function Checkout() {
     const [payValue, setPayValue] = useState('Paypal');
     const [itemId, setItemId] = useState('')
     const shopData = JSON.parse(localStorage.getItem('shopping_card'))
+    const user = JSON.parse(localStorage.getItem('user'))
     const totalPrice = useSelector((state) => (state.shoppingSlice.total))
     const coupon_has = useSelector((state) => (state.shoppingSlice.coupon))
     const dispatch = useDispatch()
@@ -34,13 +35,20 @@ function Checkout() {
     };
 
     const handleSubmit = async (values) => {
-        const { firstName, lastName, paymentValue} = values;
+        const { paymentValue} = values;
         
-        await axios.post(`https://green-shop-backend.onrender.com/api/order/make-order?access_token=6506e8bd6ec24be5de357927`, {shop_list: shopData, billing_address: {name: firstName, surname: lastName}, extra_shop_info: {total: totalPrice, method: payValue}}).then((res) => {
+        await axios.post(`https://dummyjson.com/carts/add`, {
+            headers: { 'Content-Type': 'application/json' }
+        }, {
+            body: JSON.stringify({
+                userId: user.id,
+                products: shopData
+              })
+        }).then((res) => {
             console.log(res)
-            showModal()
             setItemId(res.data.data._id)
             dispatch(setTrackOrder(paymentValue))
+            showModal()
         }).catch(() => {
             toast.error('Something went wrong, Please try again')
         })

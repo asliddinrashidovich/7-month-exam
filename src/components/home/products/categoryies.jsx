@@ -18,6 +18,8 @@ function Categoryies() {
     const updateParams = (categorytype) => {
         searchParams.set('category', categorytype)
         searchParams.set('products-search', "")
+        searchParams.set('range_min', 0)
+        searchParams.set('range_max', 1000)
         setSearchParams(searchParams)
     }
 

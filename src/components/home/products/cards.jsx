@@ -40,8 +40,8 @@ function ProductCards() {
     
     
     // filter by amount
-    // const rangeMin  = searchParams.get('range_min') || 0
-    // const rangeMax  = searchParams.get('range_max') || 1000
+    const rangeMin  = searchParams.get('range_min') || 0
+    const rangeMax  = searchParams.get('range_max') || 1000
     
     const handleSliderFilter = () => {
         searchParams.set('range_min', value[0])
@@ -51,7 +51,7 @@ function ProductCards() {
     }
     
     // search 
-    const searchProducts  = searchParams.get('products-search')
+    const searchProducts  = searchParams.get('products-search') || ""
 
     const onSearch = (value, _e, info) => {
       console.log(info === null || info === void 0 ? void 0 : info.source, value);
@@ -67,9 +67,15 @@ function ProductCards() {
         const res = await axios.get(`https://dummyjson.com/products/category/${categoryBy}`);
         const allProducts = res.data.products;
 
-        const filtered = allProducts.filter(product =>
-            product.title.toLowerCase().includes(searchProducts.toLowerCase())
-        );
+        const filtered = allProducts.filter(product => {
+            const matchesSearch = searchProducts
+                ? product.title.toLowerCase().includes(searchProducts.toLowerCase())
+                : true;
+
+            const matchesPrice = product.price >= rangeMin && product.price <= rangeMax;
+
+            return matchesSearch && matchesPrice;
+        });
         console.log(allProducts, searchProducts)
 
         return { products: filtered };
@@ -80,7 +86,7 @@ function ProductCards() {
         queryFn: fetchCategory,
     });
     const { data: productsData, isLoading: loading3} = useQuery({
-        queryKey: ["dummy-data", categoryBy, searchProducts],
+        queryKey: ["dummy-data", categoryBy, searchProducts, rangeMin, rangeMax],
         queryFn: dataDummy,
     });
     
