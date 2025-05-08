@@ -10,7 +10,7 @@ const { TextArea } = Input;
 
 function Checkout() {
     const [payValue, setPayValue] = useState('Paypal');
-    const [itemId, setItemId] = useState('')
+    const [itemId, setItemId] = useState()
     const shopData = JSON.parse(localStorage.getItem('shopping_card'))
     const user = JSON.parse(localStorage.getItem('user'))
     const totalPrice = useSelector((state) => (state.shoppingSlice.total))
@@ -19,6 +19,7 @@ function Checkout() {
     const navigate = useNavigate()
     const [isModalOpen, setIsModalOpen] = useState(false);
     const now = new Date()
+    
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -37,21 +38,22 @@ function Checkout() {
     const handleSubmit = async (values) => {
         const { paymentValue} = values;
         
-        await axios.post(`https://dummyjson.com/carts/add`, {
-            headers: { 'Content-Type': 'application/json' }
-        }, {
-            body: JSON.stringify({
+        try {
+            const res = await axios.post(`https://dummyjson.com/carts/add`, {
                 userId: user.id,
                 products: shopData
-              })
-        }).then((res) => {
-            console.log(res)
-            setItemId(res.data.data._id)
-            dispatch(setTrackOrder(paymentValue))
-            showModal()
-        }).catch(() => {
-            toast.error('Something went wrong, Please try again')
-        })
+            }, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+    
+            console.log(res);
+            setItemId(res.data.id); // Use 'res.data.id' or adjust depending on actual response structure
+            dispatch(setTrackOrder(paymentValue));
+            showModal();
+        } catch (error) {
+            console.log(error)
+            toast.error('Something went wrong, Please try again');
+        }
     };
     console.log(shopData)
 
@@ -229,7 +231,7 @@ function Checkout() {
                             <div className="flex justify-between mb-[40px]">
                                 <div>
                                     <h3 className="text-[14px] font-[400] leading-[16px] text-[#727272] mb-[7px]">Oreder Number</h3>
-                                    <h3 className="text-[15px] font-[700] leading-[16px] text-[#3D3D3D]">{itemId.slice(itemId.length - 14)}</h3>
+                                    <h3 className="text-[15px] font-[700] leading-[16px] text-[#3D3D3D]">{itemId}</h3>
                                 </div>
                                 <div>
                                     <h3 className="text-[14px] font-[400] leading-[16px] text-[#727272] mb-[7px]">Date</h3>

@@ -39,7 +39,6 @@ function AccountDetails() {
 
     
 
-    console.log(token)
     if(loading1) {
         return <AccountDetailsSkeleton/>
     }
