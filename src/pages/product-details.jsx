@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import {Link, useNavigate, useParams } from "react-router-dom";
-import { FaStar } from "react-icons/fa6";
-import {MainButton} from "../components"
+import {MainButton, ProductDetailsSkeleton} from "../components"
 import { FaRegHeart } from "react-icons/fa";
 import { FaFacebookF } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
@@ -12,9 +11,8 @@ import { useDispatch } from "react-redux";
 import { addDataToShopping, decreaseCountFromShopping, increaseCountFromShopping } from "../reducers/shoppingSlice";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { Tabs } from "antd";
+import { Image, Rate, Tabs } from "antd";
 import { format } from 'date-fns';
-import FlowersCards from "../components/skleton/flowers-card";
 import ReletedProductsData from "../components/releted-products.jsx/swipper-data";
 
 const onChange = key => {
@@ -79,7 +77,7 @@ function ProductDetailsPage() {
     console.log(flowerReletedData)
 
     if(loading1 && loading2) {
-        return <FlowersCards/>
+        return <ProductDetailsSkeleton/>
     }
     return (
         <div className="pt-9 px-5 md:px-10">
@@ -98,7 +96,7 @@ function ProductDetailsPage() {
                     ))}
                 </div>
                 <div className="p-[20px] w-full max-w-[444px] max-h-[444px] flex overflow-hidden justify-center items-center">
-                    <img src={main_img} alt="main img" />
+                    <Image src={main_img} alt="main img" />
                 </div>
                 </div>
                 <div>
@@ -108,12 +106,8 @@ function ProductDetailsPage() {
                         <h3 className="text-[#46A358] text-[22px] font-[700] leading-[16px]">${flowersData?.price}</h3>
                     </div>
                     <div className="flex items-center gap-[10px]">
-                    <div className="flex gap-[5px]">
-                        <FaStar className="cursor-pointer text-[#C4C4C4]" />
-                        <FaStar className="cursor-pointer text-[#C4C4C4]" />
-                        <FaStar className="cursor-pointer text-[#C4C4C4]" />
-                        <FaStar className="cursor-pointer text-[#C4C4C4]" />
-                        <FaStar className="cursor-pointer text-[#C4C4C4]" />
+                    <div className="min-w-[140px]">
+                        <Rate />
                     </div>
                     <h2><span>{flowersData?.reviews?.length}</span> Customer Review</h2>
                     </div>
@@ -123,16 +117,16 @@ function ProductDetailsPage() {
                     <p className="text-[#727272] text-[15px] font-[400] leading-[24px] mb-[24px]">{flowersData?.description}</p>
                     <h3 className="text-[#3D3D3D] text-[20px] font-[500] leading-[16px] mt-[15px] mb-[10px]" >Size:</h3>
                     <div className="flex gap-[10px] mb-[23px]">
-                    <button className="flex justify-center items-center w-[28px] h-[28px] text-[#727272] font-[700] text-[18px] leading-[16px] border-[1px] border-[#727272] rounded-full cursor-pointer">
+                    <button className="flex justify-center items-center w-[28px] h-[28px] text-[#727272] font-[700] text-[18px] leading-[16px] border-[1px] border-[#727272] rounded-full cursor-pointer hover:text-[#46A358] hover:border-[#46A358]">
                         S
                     </button>
-                    <button className="flex justify-center items-center w-[28px] h-[28px] text-[#727272] font-[700] text-[18px] leading-[16px] border-[1px] border-[#727272] rounded-full cursor-pointer">
+                    <button className="flex justify-center items-center w-[28px] h-[28px] text-[#727272] font-[700] text-[18px] leading-[16px] border-[1px] border-[#727272] rounded-full cursor-pointer hover:text-[#46A358] hover:border-[#46A358]">
                         M
                     </button>
-                    <button className="flex justify-center items-center w-[28px] h-[28px] text-[#727272] font-[700] text-[18px] leading-[16px] border-[1px] border-[#727272] rounded-full cursor-pointer">
+                    <button className="flex justify-center items-center w-[28px] h-[28px] text-[#727272] font-[700] text-[18px] leading-[16px] border-[1px] border-[#727272] rounded-full cursor-pointer hover:text-[#46A358] hover:border-[#46A358]">
                         L
                     </button>
-                    <button className="flex justify-center items-center w-[28px] h-[28px] text-[#727272] font-[700] text-[18px] leading-[16px] border-[1px] border-[#727272] rounded-full cursor-pointer">
+                    <button className="flex justify-center items-center w-[28px] h-[28px] text-[#727272] font-[700] text-[18px] leading-[16px] border-[1px] border-[#727272] rounded-full cursor-pointer hover:text-[#46A358] hover:border-[#46A358]">
                         XL
                     </button>
                     </div>
@@ -151,9 +145,11 @@ function ProductDetailsPage() {
                         </button>
                     </div>
                     <div className="flex gap-[10px] ">
-                        <button onClick={() => handleBuyNow(flowersData)}>
-                        <MainButton >Buy NOW</MainButton>
-                        </button>
+                        <MainButton >
+                            <button onClick={() => handleBuyNow(flowersData)}>
+                                Buy NOW
+                            </button>
+                        </MainButton>
                         <button onClick={() => handleAdd(flowersData)} className="font-[700] text-[14px] leading-[20px] border-[1px] border-[#46A358] rounded-[6px] px-[20px] uppercase text-[#46A358] cursor-pointer py-[11px]">Add to cart</button>
                         <button className="font-[700] text-[20px] leading-[20px] border-[1px] border-[#46A358] rounded-[6px] p-[10px] uppercase text-[#46A358] cursor-pointer ">
                         <FaRegHeart />

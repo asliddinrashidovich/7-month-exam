@@ -13,6 +13,7 @@ function Checkout() {
     const [itemId, setItemId] = useState()
     const shopData = JSON.parse(localStorage.getItem('shopping_card'))
     const user = JSON.parse(localStorage.getItem('user'))
+    const token = localStorage.getItem('token')
     const totalPrice = useSelector((state) => (state.shoppingSlice.total))
     const coupon_has = useSelector((state) => (state.shoppingSlice.coupon))
     const dispatch = useDispatch()
@@ -36,23 +37,27 @@ function Checkout() {
     };
 
     const handleSubmit = async (values) => {
-        const { paymentValue} = values;
+        if(token) {
+            const { paymentValue} = values;
+            
+            try {
+                const res = await axios.post(`https://dummyjson.com/carts/add`, {
+                    userId: user.id,
+                    products: shopData
+                }, {
+                    headers: { 'Content-Type': 'application/json' }
+                });
         
-        try {
-            const res = await axios.post(`https://dummyjson.com/carts/add`, {
-                userId: user.id,
-                products: shopData
-            }, {
-                headers: { 'Content-Type': 'application/json' }
-            });
-    
-            console.log(res);
-            setItemId(res.data.id); // Use 'res.data.id' or adjust depending on actual response structure
-            dispatch(setTrackOrder(paymentValue));
-            showModal();
-        } catch (error) {
-            console.log(error)
-            toast.error('Something went wrong, Please try again');
+                console.log(res);
+                setItemId(res.data.id); // Use 'res.data.id' or adjust depending on actual response structure
+                dispatch(setTrackOrder(paymentValue));
+                showModal();
+            } catch (error) {
+                console.log(error)
+                toast.error('Something went wrong, Please try again');
+            }
+        } else {
+            toast.error("You have not login yet, Please Login")
         }
     };
     console.log(shopData)
