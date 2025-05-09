@@ -14,7 +14,7 @@ export const useHeroSliderData = () => {
       img: 'https://cdn.dummyjson.com/product-images/mens-shoes/nike-air-jordan-1-red-and-black/1.webp',
     },
     {
-      headerText: t('heroSlider2'),
+      headerText: t('heroSlider3'),
       img: 'https://cdn.dummyjson.com/product-images/mens-watches/longines-master-collection/1.webp',
     }
   ];

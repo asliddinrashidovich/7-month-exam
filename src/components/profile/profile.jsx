@@ -27,40 +27,40 @@ function ProfileSection() {
     }
   return (
     <div className="max-w-[1200px] mx-auto flex py-[40px] gap-[30px] px-[20px]">
-        <div className="md:block hidden w-[25%] p-[18px]">
-            <h2 className="font-[700] text-[18px] leading-[16px] mb-[17px]">My Account</h2>
+        <div className="md:block w-[10%]  md:w-[25%] p-[18px]">
+            <h2 className="font-[700] text-[18px] leading-[16px] mb-[17px] md:flex hidden">My Account</h2>
             <div>
-                <div onClick={() => handleTab('Account Details')} className={`flex gap-[11px] items-center border-l-[5px] pl-[20px] cursor-pointer  ${activeFilter == 'account-details' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
-                    <img src="/profile/user_logo.svg" alt="user" />
-                    <p className={`font-[700] text-[15px] leading-[45px] ${activeFilter == 'account-details' ? 'text-[#46A358]' : 'text-[#727272]'}`}>Account Details</p>
+                <div onClick={() => handleTab('Account Details')} className={`flex gap-[11px] items-center border-l-[5px] pl-[10px] md:pl-[20px] cursor-pointer  ${activeFilter == 'account-details' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
+                    <img className="min-w-[18px] min-h-[18px]  md:mb-0 mb-[10px]" src="/profile/user_logo.svg" alt="user" />
+                    <p className={`font-[700] text-[15px] hidden md:flex leading-[45px] ${activeFilter == 'account-details' ? 'text-[#46A358]' : 'text-[#727272]'}`}>Account Details</p>
                 </div>
-                <div onClick={() => handleTab('My products')} className={`flex gap-[11px] items-center border-l-[5px] pl-[20px] cursor-pointer ${activeFilter == 'my-products' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
-                    <img src="/profile/Bag.svg" alt="bag" />
-                    <p className={`font-[700] text-[15px] leading-[45px] ${activeFilter == 'my-products' ? 'text-[#46A358]' : 'text-[#727272]'}`}>My products</p>
+                <div onClick={() => handleTab('My products')} className={`flex gap-[11px] items-center border-l-[5px] pl-[10px] md:pl-[20px] cursor-pointer ${activeFilter == 'my-products' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
+                    <img className="min-w-[18px] min-h-[18px]  md:mb-0 mb-[10px]" src="/profile/Bag.svg" alt="bag" />
+                    <p className={`font-[700] text-[15px] hidden md:flex leading-[45px] ${activeFilter == 'my-products' ? 'text-[#46A358]' : 'text-[#727272]'}`}>My products</p>
                 </div>
-                <div onClick={() => handleTab('Address')} className={`flex gap-[11px] items-center border-l-[5px] pl-[20px] cursor-pointer ${activeFilter == 'address' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
-                    <img src="/profile/Location.svg" alt="location" />
-                    <p className={`font-[700] text-[15px] leading-[45px] ${activeFilter == 'address' ? 'text-[#46A358]' : 'text-[#727272]'}`}>Address</p>
+                <div onClick={() => handleTab('Address')} className={`flex gap-[11px] items-center border-l-[5px] pl-[10px] md:pl-[20px] cursor-pointer ${activeFilter == 'address' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
+                    <img className="min-w-[18px] min-h-[18px]  md:mb-0 mb-[10px]" src="/profile/Location.svg" alt="location" />
+                    <p className={`font-[700] text-[15px] hidden md:flex leading-[45px] ${activeFilter == 'address' ? 'text-[#46A358]' : 'text-[#727272]'}`}>Address</p>
                 </div>
-                <div onClick={() => handleTab('My Posts')} className={`flex gap-[11px] items-center border-l-[5px] pl-[20px] cursor-pointer ${activeFilter == 'my-posts' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
-                    <img src="/profile/like (2).svg" alt="likes" />
-                    <p className={`font-[700] text-[15px] leading-[45px] ${activeFilter == 'my-posts' ? 'text-[#46A358]' : 'text-[#727272]'}`}>My Posts</p>
+                <div onClick={() => handleTab('My Posts')} className={`flex gap-[11px] items-center border-l-[5px] pl-[10px] md:pl-[20px] cursor-pointer ${activeFilter == 'my-posts' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
+                    <img className="min-w-[18px] min-h-[18px]  md:mb-0 mb-[10px]" src="/profile/like (2).svg" alt="likes" />
+                    <p className={`font-[700] text-[15px] hidden md:flex leading-[45px] ${activeFilter == 'my-posts' ? 'text-[#46A358]' : 'text-[#727272]'}`}>My Posts</p>
                 </div>
-                <div onClick={() => handleTab('Track Order')} className={`flex gap-[11px] items-center border-l-[5px] pl-[20px] cursor-pointer ${activeFilter == 'track-order' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
-                    <IoMdSpeedometer style={{color: '#727272'}}/>
-                    <p className={`font-[700] text-[15px] leading-[45px] ${activeFilter == 'track-order' ? 'text-[#46A358]' : 'text-[#727272]'}`}>Track Order</p>
+                <div onClick={() => handleTab('Track Order')} className={`flex gap-[11px] items-center border-l-[5px] pl-[10px] md:pl-[20px] cursor-pointer ${activeFilter == 'track-order' ? 'border-[#46A358]' : 'border-[#fff]'}`}> 
+                    <IoMdSpeedometer className="min-w-[18px] min-h-[18px]  md:mb-0 mb-[10px]" style={{color: '#727272'}}/>
+                    <p className={`font-[700] text-[15px] hidden md:flex leading-[45px] ${activeFilter == 'track-order' ? 'text-[#46A358]' : 'text-[#727272]'}`}>Track Order</p>
                 </div>
             </div>
-            <hr className="border-[0.5px] border-[#46A358] my-[30px]"/>
+            <hr className="border-[0.5px] border-[#fff] md:border-[#46A358] my-[30px] "/>
             <button  onClick={showModal} className="flex gap-[11px] text-[#e04242] items-center  pl-[20px] cursor-pointer"> 
-                <img src="/profile/Logout.svg" alt="logout"  className="text-inherit border-[#e04242]"/>
-                <p className="font-[700] text-[15px] text-inherit leading-[45px]">Logout</p>
+                <img src="/profile/Logout.svg" alt="logout"  className="text-inherit border-[#e04242] min-w-[18px] min-h-[18px]  md:mb-0"/>
+                <p className="font-[700] text-[15px] hidden md:flex text-inherit leading-[45px]">Logout</p>
             </button>
             <Modal title="❗Do you want to logout?" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
                 <p className="text-[15px] font-[500]">Please make sure, bacause this action cannot be undone!</p>
             </Modal>
         </div>
-        <div className="w-full md:w-[75%]">
+        <div className="w-[90%] md:w-[75%]">
             <Outlet/>
         </div>
     </div>

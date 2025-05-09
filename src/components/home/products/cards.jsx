@@ -103,7 +103,7 @@ function ProductCards() {
   return (
     <div className="w-full lg:w-[70%]">
         <div className="flex justify-between items-center mb-[35px]">
-            <div className="flex gap-[15px] md:gap-[35px]">
+            <div className="hidden sm:flex gap-[15px] md:gap-[35px]">
                 <h3 onClick={() => updateTypeSort('all-plants')} className={`text-[14px] md:text-[16px] ${typeSort == 'all-plants' ? 'text-[#46A358] border-b-[1px] border-[#46A358] pb-[5px]' : 'text-[#3D3D3D] pb-[5px]'}  font-[700] cursor-pointer leading-[16px]`}>All Plants</h3>
                 <h3 onClick={() => updateTypeSort('new-arrivals')} className={`text-[14px] md:text-[16px] ${typeSort == 'new-arrivals' ? 'text-[#46A358] border-b-[1px] border-[#46A358] pb-[5px]' : 'text-[#3D3D3D] pb-[5px]'}  font-[700] cursor-pointer leading-[16px]`}>New Arrivals</h3>
                 <h3 onClick={() => updateTypeSort('sale')} className={`text-[14px] md:text-[16px] ${typeSort == 'sale' ? 'text-[#46A358] border-b-[1px] border-[#46A358] pb-[5px]' : 'text-[#3D3D3D] pb-[5px]'}  font-[700] cursor-pointer leading-[16px]`}>Sale</h3>
@@ -124,7 +124,7 @@ function ProductCards() {
                         {categoryData && categoryData?.map((item) => (
                             <div key={item.title} onClick={() => updateParams(item.slug)} className="flex text-[#46A358] justify-between w-full cursor-pointer group">
                                 <p className={`font-[700] text-[15px] leading-[40px] ${categoryBy == item.slug ? 'text-[#46A358]' : 'text-[#3D3D3D] '}  group-hover:text-[#46A358] transition-all duration-[.3s]` }>{item.name}</p>
-                                <p className={`font-[700] text-[15px] leading-[40px] ${categoryBy == item.slug ? 'text-[#46A358]' : 'text-[#3D3D3D] '} group-hover:text-[#46A358] transition-all duration-[.3s]`}>(0)</p>
+                                <p className={`font-[700] text-[15px] leading-[40px] ${categoryBy == item.slug ? 'text-[#46A358]' : 'text-[#3D3D3D] '} group-hover:text-[#46A358] transition-all duration-[.3s]`}></p>
                             </div>
                         ))}
                     </div>
@@ -147,7 +147,7 @@ function ProductCards() {
                 </Modal>
             </div>
         </div>
-        {!loading3 && <div className="grid grid-cols-2 md:grid-cols-3 gap-[33px]">
+        {!loading3 && <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[33px]">
         {productsData?.products?.map((item) => (
             <div key={item.title}>
             <div className="flex group overflow-hidden justify-center relative w-full h-[300px] items-center bg-[#FBFBFB] mb-3">
