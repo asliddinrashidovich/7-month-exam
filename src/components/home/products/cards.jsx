@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { addDataToShopping } from "../../../reducers/shoppingSlice";
 import { useQuery } from "@tanstack/react-query";
 import FlowersCards from "../../skleton/flowers-card";
-import { Space, Input } from "antd";
+import { Space, Input, Pagination } from "antd";
 const { Search } = Input;
 
 function ProductCards() {
@@ -17,6 +17,8 @@ function ProductCards() {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const [currentPage, setCurrentPage] = useState(1)
+    const pageSize = 9;
     const dispatch = useDispatch()
     
     // useSearchparams
@@ -63,8 +65,13 @@ function ProductCards() {
         const res = await axios.get(`https://dummyjson.com/products/categories`);
         return res.data;
     };
-    const dataDummy = async () => {
+
+    const getDataTotalProdcuts = async () => {
         const res = await axios.get(`https://dummyjson.com/products/category/${categoryBy}`);
+        return res.data
+    }
+    const dataDummy = async () => {
+        const res = await axios.get(`https://dummyjson.com/products/category/${categoryBy}?limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`);
         const allProducts = res.data.products;
 
         const filtered = allProducts.filter(product => {
@@ -86,10 +93,14 @@ function ProductCards() {
         queryFn: fetchCategory,
     });
     const { data: productsData, isLoading: loading3} = useQuery({
-        queryKey: ["dummy-data", categoryBy, searchProducts, rangeMin, rangeMax],
+        queryKey: ["dummy-data", categoryBy, searchProducts, rangeMin, rangeMax, currentPage],
         queryFn: dataDummy,
     });
-    
+    const { data: totalCountData} = useQuery({
+        queryKey: ["total-data", categoryBy, searchProducts, rangeMin, rangeMax, currentPage],
+        queryFn: getDataTotalProdcuts,
+    });
+    console.log('as', totalCountData)
 
     function handleAddToCard(itemData) {
         toast.success('Added to you shopping card!')
@@ -147,35 +158,43 @@ function ProductCards() {
                 </Modal>
             </div>
         </div>
-        {!loading3 && <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[33px]">
-        {productsData?.products?.map((item) => (
-            <div key={item.title}>
-            <div className="flex group overflow-hidden justify-center relative w-full h-[300px] items-center bg-[#FBFBFB] mb-3">
-                <img src={item.images[0]} alt="main image" />
-                <div className="hidden gap-[20px] group-hover:flex items-center absolute bottom-[10px]">
-                    <img onClick={() => handleAddToCard(item)} className="cursor-pointer" src="/navbar/shop_icon.svg" alt="shop" />
-                    <img className="cursor-pointer" src="/flowers/like.svg" alt="like" />
-                    <Link to={`/shop/${item.id}`}>
-                        <img className="cursor-pointer" src="/navbar/search_icon.svg" alt="search" />
-                    </Link>
+            {!loading3 && (
+                <div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[33px]">
+                    {productsData?.products?.map((item) => (
+                        <div key={item.title}>
+                        <div className="flex group overflow-hidden justify-center relative w-full h-[300px] items-center bg-[#FBFBFB] mb-3">
+                            <img src={item.images[0]} alt="main image" />
+                            <div className="hidden gap-[20px] group-hover:flex items-center absolute bottom-[10px]">
+                                <img onClick={() => handleAddToCard(item)} className="cursor-pointer" src="/navbar/shop_icon.svg" alt="shop" />
+                                <img className="cursor-pointer" src="/flowers/like.svg" alt="like" />
+                                <Link to={`/shop/${item.id}`}>
+                                    <img className="cursor-pointer" src="/navbar/search_icon.svg" alt="search" />
+                                </Link>
+                            </div>
+                            {item.discount && <div className={`absolute left-0 top-[20px]`}>
+                                <MainButton >13% OFF</MainButton>
+                            </div>}
+                        </div>
+                        <Link to={`/shop/${item.id}`} className="text-[16px] hover:underline  font-[400] leading-[16px] text-[#3D3D3D] mb-[6px]">{item.title}</Link>
+                        <h2 className="text-[18px] font-[700] leading-[16px] text-[#46A358] mb-[6px]">${item.price} <span className="font-[400] line-through text-[#A5A5A5]"> {item.discount && '$'}{item.discount &&  item.discount_price}</span></h2>
+                        </div>
+                    ))}
+                    </div>
+                    <div className="flex justify-center my-[40px]">
+                        <Pagination total={totalCountData?.products.length} current={currentPage} pageSize={pageSize} onChange={(e) => setCurrentPage(e)}/>
+                    </div>
                 </div>
-                {item.discount && <div className={`absolute left-0 top-[20px]`}>
-                    <MainButton >13% OFF</MainButton>
-                </div>}
-            </div>
-            <Link to={`/shop/${item.id}`} className="text-[16px] hover:underline  font-[400] leading-[16px] text-[#3D3D3D] mb-[6px]">{item.title}</Link>
-            <h2 className="text-[18px] font-[700] leading-[16px] text-[#46A358] mb-[6px]">${item.price} <span className="font-[400] line-through text-[#A5A5A5]"> {item.discount && '$'}{item.discount &&  item.discount_price}</span></h2>
-            </div>
-        ))}
-        </div>}
+            )
+            }
         {loading3 && <FlowersCards/>}
         <div className="w-full flex justify-center pt-[100px] ">
-        {!productsData?.products?.length && (
-            <div className="text-center gap-[10px]">
-            <img src="/flowers/no_data.svg" alt="no data" />
-            <p>Data is empty.</p>
-            </div>
-        )}
+            {!productsData?.products?.length && (
+                <div className="text-center gap-[10px]">
+                <img src="/flowers/no_data.svg" alt="no data" />
+                <p>Data is empty.</p>
+                </div>
+            )}
         </div>
     </div>
   )

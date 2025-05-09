@@ -11,9 +11,10 @@ import { useDispatch } from "react-redux";
 import { addDataToShopping, decreaseCountFromShopping, increaseCountFromShopping } from "../reducers/shoppingSlice";
 import toast from "react-hot-toast";
 import { useState } from "react";
-import { Image, Rate, Tabs } from "antd";
+import { Button, Form, Image, Input, Modal, Rate, Tabs } from "antd";
 import { format } from 'date-fns';
 import ReletedProductsData from "../components/releted-products.jsx/swipper-data";
+import { MdDelete, MdEdit } from "react-icons/md";
 
 const onChange = key => {
     console.log(key);
@@ -25,6 +26,43 @@ function ProductDetailsPage() {
     const [main_img, setMainImg] = useState()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen2, setIsModalOpen2] = useState(false);
+      
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
+     
+    const showModal2 = () => {
+        setIsModalOpen2(true);
+    };
+    const handleOk2 = async () => {
+        try {
+            const res = await axios.put(`https://dummyjson.com/products/${id}`)
+            
+            console.log(res)
+            setIsModalOpen2(false)
+            toast.success("Your Product Deleted successfully")
+        } catch (error) {
+            console.log(error)
+            toast.error('Something went wrong, Please try again');
+        }
+        navigate('/')
+    };
+    const handleCancel2 = () => {
+        setIsModalOpen2(false);
+    };
+
+ 
 
     const fetchFlower = async () => {
       const {data} = await axios.get(`https://dummyjson.com/products/${id}`)
@@ -53,6 +91,28 @@ function ProductDetailsPage() {
       toast.success('Added to you shopping card!')
       dispatch(addDataToShopping(itemData))
     }
+    
+    // edit data
+    const EditProduct = async (values) => {
+        const {title, image, quantity, price} = values
+        try {
+            const res = await axios.put(`https://dummyjson.com/products/${id}`, {
+                title,
+                image,
+                quantity,
+                price
+            }, {
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            console.log(res)
+            setIsModalOpen(false)
+            toast.success("Your Product Edided successfully")
+        } catch (error) {
+            console.log(error)
+            toast.error('Something went wrong, Please try again');
+        }
+    };
 
     const items = [
         {
@@ -152,30 +212,129 @@ function ProductDetailsPage() {
                         </MainButton>
                         <button onClick={() => handleAdd(flowersData)} className="font-[700] text-[14px] leading-[20px] border-[1px] border-[#46A358] rounded-[6px] px-[20px] uppercase text-[#46A358] cursor-pointer py-[11px]">Add to cart</button>
                         <button className="font-[700] text-[20px] leading-[20px] border-[1px] border-[#46A358] rounded-[6px] p-[10px] uppercase text-[#46A358] cursor-pointer ">
-                        <FaRegHeart />
+                            <FaRegHeart />
                         </button>
+                        <button onClick={showModal} className="font-[700] text-[20px] leading-[20px] border-[1px] border-[#46A358] rounded-[6px] p-[10px] uppercase text-[#46A358] cursor-pointer ">
+                            <MdEdit />
+                        </button>
+                        <Modal
+                            title="Edit product"
+                            closable={{ 'aria-label': 'Custom Close Button' }}
+                            open={isModalOpen}
+                            onOk={handleOk}
+                            onCancel={handleCancel}
+                            >
+                            <Form
+                                style={{ width: '100%'}}
+                                initialValues={{
+                                    title: "",
+                                    price: "",
+                                    quantity: "",
+                                    image: ""
+                                }}
+                                onFinish={(values) => EditProduct(values)}
+                                autoComplete="off"
+                                name="layout-multiple-horizontal"
+                                layout="horizontal"
+                                >
+                                <Form.Item
+                                    name="title"
+                                    layout="vertical"
+                                    label="Title"
+                                    style={{width: '100%'}} 
+                                    rules={[{ required: true, message: 'Please enter your product title!'}]}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    className="h-[60px]"
+                                >
+                                    <Input  placeholder='product title'/>
+                                </Form.Item>
+                                <Form.Item
+                                    name="price"
+                                    layout="vertical"
+                                    label="Price"
+                                    style={{width: '100%'}} 
+                                    rules={[{ required: true, message: 'Please enter your product price!'}]}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    className="h-[60px]"
+                                >
+                                    <Input  placeholder='product price'/>
+                                </Form.Item>
+                                <Form.Item
+                                    name="quantity"
+                                    layout="vertical"
+                                    label="Quantity"
+                                    style={{width: '100%'}} 
+                                    rules={[{ required: true, message: 'Please enter your product quantity!'}]}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    className="h-[60px]"
+                                >
+                                    <Input  placeholder='product quantity'/>
+                                </Form.Item>
+                                <Form.Item
+                                    name="image"
+                                    layout="vertical"
+                                    label="Image"
+                                    style={{width: '100%'}} 
+                                    rules={[{ required: true, message: 'Please enter your product image!'}]}
+                                    labelCol={{ span: 24 }}
+                                    wrapperCol={{ span: 24 }}
+                                    className="h-[60px]"
+                                >
+                                    <Input  placeholder='product image url'/>
+                                </Form.Item>
+                            
+                                <Form.Item label={null}>
+                                    <Button 
+                                    onSubmit={EditProduct}
+                                    htmlType="submit"
+                                    style={{
+                                        width: '100%',
+                                        backgroundColor: '#46A358',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '16px 0',
+                                        marginBottom: '47px'
+                                    }}
+                                    >
+                                    Submit
+                                    </Button>
+                                </Form.Item>
+                                </Form>
+                        </Modal>
+                        <button onClick={showModal2} className="font-[700] text-[20px] leading-[20px] border-[1px] border-[red] rounded-[6px] p-[10px] uppercase text-[red] cursor-pointer ">
+                            <MdDelete />
+                        </button>
+                        <Modal title="❗Do you want to Delete this product?" open={isModalOpen2} onOk={handleOk2} onCancel={handleCancel2}>
+                            <p className="text-[15px] font-[500]">Please make sure, bacause this action cannot be undone!</p>
+                        </Modal>
                     </div>
                     </div>
                     <div>
-                    <div className="flex gap-[10px] mb-[10px]">
-                        <span className="font-[400] text-[15px] leading-[16px]">SKU: </span>
-                        <span className="font-[600] text-[15px] leading-[16px]"> {flowersData?.sku}</span>
-                    </div>
-                    <div className="flex gap-[10px] mb-[10px]">
-                        <span className="font-[400] text-[15px] leading-[16px]">Categories: </span>
-                        <span className="font-[600] text-[15px] leading-[16px] uppercase"> {flowersData?.category}</span>
-                    </div>
-                    <div className="flex gap-[10px] mb-[28px]">
-                        <span className="font-[400] text-[15px] leading-[16px]">Tags: </span>
-                        <span className="font-[600] text-[15px] leading-[16px] "> {flowersData?.tags?.map(it => (it + ',  '))}</span>
-                    </div>
-                    <div className="flex gap-[17px] items-center" >
-                        <h2 className="font-[500] text-[20px] leading-[16px] text-[#3D3D3D] cursor-pointer">Share this products: </h2>
-                        <FaFacebookF className="cursor-pointer"/>
-                        <FaTwitter  className="cursor-pointer"/>
-                        <FaLinkedinIn  className="cursor-pointer"/>
-                        <CiMail className="cursor-pointer"/>
-                    </div>
+                        <div>
+
+                        </div>
+                        <div className="flex gap-[10px] mb-[10px]">
+                            <span className="font-[400] text-[15px] leading-[16px]">SKU: </span>
+                            <span className="font-[600] text-[15px] leading-[16px]"> {flowersData?.sku}</span>
+                        </div>
+                        <div className="flex gap-[10px] mb-[10px]">
+                            <span className="font-[400] text-[15px] leading-[16px]">Categories: </span>
+                            <span className="font-[600] text-[15px] leading-[16px] uppercase"> {flowersData?.category}</span>
+                        </div>
+                        <div className="flex gap-[10px] mb-[28px]">
+                            <span className="font-[400] text-[15px] leading-[16px]">Tags: </span>
+                            <span className="font-[600] text-[15px] leading-[16px] "> {flowersData?.tags?.map(it => (it + ',  '))}</span>
+                        </div>
+                        <div className="flex gap-[17px] items-center" >
+                            <h2 className="font-[500] text-[20px] leading-[16px] text-[#3D3D3D] cursor-pointer">Share this products: </h2>
+                            <FaFacebookF className="cursor-pointer"/>
+                            <FaTwitter  className="cursor-pointer"/>
+                            <FaLinkedinIn  className="cursor-pointer"/>
+                            <CiMail className="cursor-pointer"/>
+                        </div>
                     </div>
                 </div>
                 </div>
