@@ -1,5 +1,6 @@
 import { Button, Form, Input } from 'antd';
 import axios from 'axios';
+import confetti from 'canvas-confetti';
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -17,6 +18,34 @@ function FormLogin({setOpen2}) {
         setOpen2(false)
         localStorage.setItem('user', JSON.stringify(res.data))
         localStorage.setItem('token', res.data.accessToken)
+
+        const end = Date.now() + 3 * 1000; 
+        const colors = ["#a786ff", "#fd8bbc", "#eca184", "#f8deb1"];
+    
+        const frame = () => {
+          if (Date.now() > end) return;
+    
+          confetti({
+            particleCount: 2,
+            angle: 60,
+            spread: 55,
+            startVelocity: 60,
+            origin: { x: 0, y: 0.5 },
+            colors: colors,
+          });
+          confetti({
+            particleCount: 2,
+            angle: 120,
+            spread: 55,
+            startVelocity: 60,
+            origin: { x: 1, y: 0.5 },
+            colors: colors,
+          });
+    
+          requestAnimationFrame(frame);
+        };
+    
+        frame();
       }).catch(() => {
         toast.error('Invalid credentals, plaese try again')
       })
