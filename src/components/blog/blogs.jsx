@@ -10,14 +10,18 @@ import { useState } from "react";
 
 function BlogsAll() {
     const navigate = useNavigate()
-    const [searchParams, setSearchParams] = useSearchParams()
     const [currentPage, setCurrentPage] = useState(1)
-    const postSearch  = searchParams.get('posts-search')
     const pageSize = 12;
-
+    
+    const [searchParams] = useSearchParams()
+    const postSearch  = searchParams.get('posts-search') || ""
     const fetchBlog = async () => {
-      const res = await axios.get(`https://dummyjson.com/posts?limit=${pageSize}&skip=${(currentPage - 1) * pageSize}&q=${postSearch || ''}`);
-      return res.data;
+      const res = await axios.get(`https://dummyjson.com/posts?limit=${pageSize}&skip=${(currentPage - 1) * pageSize}`);
+      const allProducts =  res.data.posts;
+      
+      const filtered = allProducts.filter(product =>  product.title.toLowerCase().includes(postSearch.toLowerCase()) );
+
+      return filtered
     }
     const { data: blog, isLoading: loading} = useQuery({
       queryKey: ["blog", {postSearch, currentPage}],
@@ -28,6 +32,7 @@ function BlogsAll() {
       navigate(`/posts/${id}`)
     }
 
+    console.log(blog)
     if(loading) {
         return (
             <CardSkleton/>
@@ -36,7 +41,7 @@ function BlogsAll() {
   return (
     <div className="max-w-[1200px] mx-auto  py-[40px]  px-[40px]">
       <div className=" grid-cols-1 sm:grid-cols-2 md:grid-cols-3 grid gap-[30px] ">
-          {blog?.posts?.map((item) => (
+          {blog?.map((item) => (
               <div key={item._id} className="border-[0.5px] border-[#A5A5A5]  rounded-[15px]">
                   <h2 onClick={() => handleClick(item.id)}  className="inline-block text-[20px] px-[20px] pt-[20px] font-[500] leading-[100%] mb-[20px] cursor-pointer hover:underline ">{item.title}</h2>
                   <p className="text-[14px] px-[20px] pb-[20px]  font-[400] leading-[140%] line-clamp-4">{item.body}</p>
